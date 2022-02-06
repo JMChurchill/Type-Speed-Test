@@ -52,7 +52,7 @@ const updateOnType = () => {
     originalInsensitive === textBoxValue
   ) {
     //   finished
-    toType.innerHTML = `<p><span class="highlighted">${original}</span></p>`;
+    toType.innerHTML = `<p id="toType"><span class="highlighted">${original}</span></p>`;
     stopTimer();
     timeH2.innerText = `You took ${timer} seconds`;
     user = { name: username, time: timer };
@@ -82,7 +82,7 @@ const updateOnType = () => {
       for (j = i + 1; j < originalInsensitive.length; j++) {
         end = end + originalInsensitive.charAt(j);
       }
-      toType.innerHTML = `<p><span class="highlighted">${replacementValue}</span><span class="mistake">${mistake}</span>${end}</p>`;
+      toType.innerHTML = `<p id="toType"><span class="highlighted">${replacementValue}</span><span class="mistake">${mistake}</span>${end}</p>`;
       return;
     } else {
       for (let j = 0; j <= i; j++) {
@@ -91,21 +91,21 @@ const updateOnType = () => {
       for (j = i + 1; j < originalInsensitive.length; j++) {
         end = end + originalInsensitive.charAt(j);
       }
-      toType.innerHTML = `<p><span class="highlighted">${replacementValue}</span>${end}</p>`;
+      toType.innerHTML = `<p id="toType"><span class="highlighted">${replacementValue}</span>${end}</p>`;
     }
   }
   if (textBoxValue.length === 0) {
-    toType.innerHTML = `<p>${original}</p>`;
+    toType.innerHTML = `<p id="toType">${original}</p>`;
   }
 };
 
 const addToLeaderboard = (user) => {
   leaderboard.push(user);
-  leaderboard.sort((firstItem, secondItem) => firstItem.time - secondItem.time);
   populateLeaderBoard();
 };
 
 const populateLeaderBoard = () => {
+  leaderboard.sort((firstItem, secondItem) => firstItem.time - secondItem.time);
   const table = document.getElementById("tableBody");
   document.getElementById("tableBody").innerHTML = "";
   leaderboard.forEach((user, index) => {

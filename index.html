@@ -3,80 +3,35 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/style.css" />
     <title>Document</title>
-    <style>
-      .highlighted {
-        background-color: green;
-      }
-      .mistake {
-        background-color: red;
-      }
-
-      table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-      }
-
-      td,
-      th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-      }
-
-      tr:nth-child(even) {
-        background-color: #dddddd;
-      }
-    </style>
   </head>
-  <body>
-    <div>
-      <h1>Improve your typing speed</h1>
+  <body onload="populateLeaderBoard()">
+    <h1>Improve your typing speed</h1>
+    <div class="enter-name-box">
       <label for="username">Enter a username</label>
       <input id="username" name="username" type="text" />
-      <div class="type tester">
-        <p id="toType">Type this</p>
-        <input type="text" id="textField" />
-        <!-- <input type="text" onchange="updateOnType(this.value)" /> -->
-        <!-- <button onclick="startTimer()">Start timer</button>
-        <button onclick="showTime()">show time</button>
-        <button onclick="stopTimer()">stop timer</button> -->
-        <button onclick="populateLeaderBoard()">populate table</button>
-        <button onclick="addToLeaderboard()">sort array</button>
-      </div>
-      <div class="timeTaken">
-        <h2 id="time"></h2>
-      </div>
-      <div id="leaderboard">
-        <h2>Leaderboard</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Place</th>
-              <th>User</th>
-              <th>Time taken</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-          <!-- <tr>
-            <td>1</td>
-            <td>user</td>
-            <td>1.5 seconds</td>
-          </tr>
+    </div>
+    <div class="type-tester">
+      <p id="toType">Type this really fast</p>
+      <input type="text" id="textField" />
+    </div>
+    <div class="timeTaken">
+      <h2 id="time"></h2>
+    </div>
+    <div class="leaderboard">
+      <h2>Leaderboard</h2>
+      <table>
+        <thead>
           <tr>
-            <td>1</td>
-            <td>user</td>
-            <td>1.5 seconds</td>
-          </tr> -->
-        </table>
-      </div>
+            <th>Place</th>
+            <th>User</th>
+            <th>Time taken (Seconds)</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
     </div>
   </body>
-  <!-- <script>
-    const updateOnType = () => {
-      console.log("typed");
-    };
-  </script> -->
   <script src="./scripts/scrpits.js"></script>
 </html>

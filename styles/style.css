@@ -1,0 +1,92 @@
+body {
+  background-color: white;
+  font-family: "Segoe UI";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 0 10%;
+}
+
+body h1 {
+  color: black;
+  font-size: 2rem;
+}
+
+body input {
+  border-radius: 1rem;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  margin: 1rem 0;
+  -webkit-box-shadow: inset 0 0 5px #000000af;
+          box-shadow: inset 0 0 5px #000000af;
+}
+
+body > div {
+  padding: 1rem;
+  width: 100%;
+}
+
+body .enter-name-box {
+  font-size: 1.5rem;
+}
+
+body .enter-name-box input {
+  font-size: 1.5rem;
+}
+
+body .type-tester {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  overflow-wrap: normal;
+}
+
+body .type-tester #toType {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+body .type-tester .highlighted {
+  background-color: green;
+}
+
+body .type-tester .mistake {
+  background-color: red;
+}
+
+body .type-tester input {
+  font-size: 1.5rem;
+}
+
+body .leaderboard table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+body .leaderboard table td,
+body .leaderboard table th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+body .leaderboard table tr:nth-child(even) {
+  background-color: #dddddd;
+}
+/*# sourceMappingURL=style.css.map */
