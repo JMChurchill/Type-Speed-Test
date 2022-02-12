@@ -11,11 +11,11 @@ const textBox = document.getElementById("textField");
 const timeH2 = document.getElementById("time");
 
 const leaderboard = [
-  { name: "user5", time: 5.5 },
-  { name: "user4", time: 0.5 },
-  { name: "user1", time: 0.5 },
-  { name: "user3", time: 0.5 },
-  { name: "user2", time: 1.5 },
+  { name: "user5", wpm: 50.22 },
+  { name: "user4", wpm: 20.9 },
+  { name: "user1", wpm: 100.01 },
+  { name: "user3", wpm: 35.11 },
+  { name: "user2", wpm: 70.22 },
 ];
 
 let username;
@@ -54,8 +54,19 @@ const updateOnType = () => {
     //   finished
     toType.innerHTML = `<p id="toType"><span class="highlighted">${original}</span></p>`;
     stopTimer();
-    timeH2.innerText = `You took ${timer} seconds`;
+
+    stats = document.getElementById("stats");
+    timeTaken = document.createElement("H2");
+    timeTaken.innerText = `You took ${timer} seconds`;
+    stats.appendChild(timeTaken);
+
+    let wpm = calculateWordsPerMin(timer);
+    wordsPer = document.createElement("H2");
+    wordsPer.innerText = `${wpm} words per minute`;
+    stats.appendChild(wordsPer);
+
     user = { name: username, time: timer };
+    user = { name: username, wpm: wpm };
     addToLeaderboard(user);
     // populateLeaderBoard();
     return;
@@ -105,7 +116,7 @@ const addToLeaderboard = (user) => {
 };
 
 const populateLeaderBoard = () => {
-  leaderboard.sort((firstItem, secondItem) => firstItem.time - secondItem.time);
+  leaderboard.sort((secondItem, firstItem) => firstItem.wpm - secondItem.wpm);
   const table = document.getElementById("tableBody");
   document.getElementById("tableBody").innerHTML = "";
   leaderboard.forEach((user, index) => {
@@ -118,9 +129,22 @@ const populateLeaderBoard = () => {
     } else {
       name.innerHTML = user.name;
     }
-    let time = row.insertCell(2);
-    time.innerHTML = user.time;
+    let wpm = row.insertCell(2);
+    wpm.innerHTML = user.wpm;
   });
+};
+
+const calculateWordsPerMin = (time) => {
+  //get number of words
+  numWords = 1;
+  tempOriginal = original.replace(/[\s]+/gim, " ");
+  tempOriginal.replace(/(\s+)/g, () => {
+    numWords++;
+  });
+  console.log(numWords);
+  //calculate words per minute
+  wordsPerMinute = numWords / (time / 60);
+  return wordsPerMinute.toFixed(2);
 };
 
 textBox.addEventListener("input", updateOnType);
