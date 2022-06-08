@@ -4,31 +4,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles/style.css" />
-    <title>Document</title>
+    <title>Speed</title>
   </head>
   <body onload="populateLeaderBoard()">
-    <h1>Improve your typing speed</h1>
-    <div class="enter-name-box">
+    <h1 id="welcome-message">Improve your typing speed</h1>
+    <!-- <div class="enter-name-box">
       <label for="username">Enter a username</label>
       <input id="username" name="username" type="text" />
-    </div>
+    </div> -->
     <div class="type-tester">
-      <p id="toType">Type this really fast</p>
+      <div id="letterSelectors"></div>
+      <div class="message">
+        <p id="toType">type this really fast</p>
+      </div>
       <input type="text" id="textField" />
     </div>
-    <div class="timeTaken" id="stats"></div>
-    <div class="leaderboard">
-      <h2>Leaderboard</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Place</th>
-            <th>User</th>
-            <th>Words per Minute</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
+    <div class="overlay" id="user-overlay" style="display: flex">
+      <div class="enter-name-box">
+        <div class="input-box">
+          <input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="User Name"
+          />
+          <!-- <label class="user-label" for="username">User Name</label> -->
+        </div>
+        <button class="btn" onclick="saveUsername()">Save</button>
+      </div>
+    </div>
+    <div class="overlay" id="congrats-overlay" style="display: none">
+      <div>
+        <h2>Congratulations</h2>
+        <div class="timeTaken" id="stats"></div>
+        <button class="btn" onclick="viewLeaderboard()">
+          View Leaderboard
+        </button>
+        <button class="btn" onclick="restart()">Try Again</button>
+        <button class="btn" onclick="nextLetter()">NextLetter</button>
+      </div>
+    </div>
+    <div class="overlay" id="leader-overlay" style="display: none">
+      <div class="leaderboard">
+        <h2>Leaderboard</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Place</th>
+              <th>User</th>
+              <th>Words per Minute</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <button class="btn" onclick="restart()">Try Again</button>
+      </div>
     </div>
   </body>
   <script src="./scripts/scrpits.js"></script>
