@@ -1,5 +1,3 @@
-// alert("connected");
-
 const usernameBox = document.getElementById("username");
 const letterSelectors = document.getElementById("letterSelectors");
 const overlay = document.getElementById("user-overlay");
@@ -13,20 +11,14 @@ const textBox = document.getElementById("textField");
 
 const timeH2 = document.getElementById("time");
 
+const leaderboard = JSON.parse(localStorage.getItem("leaderboard"));
+
 const uname = localStorage.getItem("name");
 if (uname != "" && uname != null && uname) {
   overlay.style.display = "none";
   welcomeMsg.innerText =
     "Hello " + uname + " can you improve your typing speed?";
 }
-
-const leaderboard = [
-  { name: "user5", wpm: 50.22 },
-  { name: "user4", wpm: 20.9 },
-  { name: "user1", wpm: 100.01 },
-  { name: "user3", wpm: 35.11 },
-  { name: "user2", wpm: 70.22 },
-];
 
 let username;
 let timer = 0;
@@ -47,7 +39,6 @@ const startTimer = () => {
     } else {
       timer = rounded + 0.5;
     }
-    // console.log(timer);
   }, 500); // runs every half second
 };
 
@@ -64,11 +55,8 @@ const updateOnType = () => {
     //   finished
     toType.innerHTML = `<p id="toType"><span class="highlighted">${original}</span></p>`;
     stopTimer();
-
     updateCongratesOverlay();
-    // ß;
 
-    // populateLeaderBoard();
     return;
   } else if (timerStarted === false) {
     startTimer();
@@ -113,6 +101,16 @@ const updateOnType = () => {
 };
 
 const updateCongratesOverlay = () => {
+  let curLet = localStorage.getItem("currentLetter");
+
+  let nextLet =
+    curLet.substring(0, curLet.length - 1) +
+    String.fromCharCode(curLet.charCodeAt(curLet.length - 1) + 1);
+
+  localStorage.setItem("progress", nextLet);
+  document.getElementById("letterSelectors").innerHTML = "";
+  populateLevelSelector(nextLet);
+
   finOverlay.style.display = "flex";
   stats = document.getElementById("stats");
   timeTaken = document.createElement("H2");
@@ -123,9 +121,9 @@ const updateCongratesOverlay = () => {
   wordsPer = document.createElement("H2");
   wordsPer.innerText = `${wpm} words per minute`;
   stats.appendChild(wordsPer);
-
-  user = { name: username, time: timer };
-  user = { name: username, wpm: wpm };
+  let username = localStorage.getItem("name");
+  // user = { name: username, time: timer };
+  user = { name: username, wpm: wpm, time: timer };
   addToLeaderboard(user);
 };
 
@@ -139,16 +137,20 @@ closeCongrats = () => {
 
 const addToLeaderboard = (user) => {
   leaderboard.push(user);
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
   populateLeaderBoard();
 };
 
 const populateLeaderBoard = () => {
+  let uName = localStorage.getItem("name");
+
   leaderboard.sort((secondItem, firstItem) => firstItem.wpm - secondItem.wpm);
   const table = document.getElementById("tableBody");
   document.getElementById("tableBody").innerHTML = "";
   leaderboard.forEach((user, index) => {
     let row = table.insertRow();
     let position = row.insertCell(0);
+    if (user.name == uName) row.style.color = "green";
     position.innerHTML = index + 1;
     let name = row.insertCell(1);
     if (user.name === "" || user.name === null || user.name === undefined) {
@@ -168,7 +170,6 @@ const calculateWordsPerMin = (time) => {
   tempOriginal.replace(/(\s+)/g, () => {
     numWords++;
   });
-  console.log(numWords);
   //calculate words per minute
   wordsPerMinute = numWords / (time / 60);
   return wordsPerMinute.toFixed(2);
@@ -186,7 +187,6 @@ const saveUsername = () => {
       "Hello " + usernameBox.value + " can you improve your typing speed?";
     localStorage.setItem("name", usernameBox.value);
   }
-  // alert(usernameBox.value);
 };
 
 const generateSentence = async (letter = "q") => {
@@ -277,12 +277,10 @@ const generateSentence = async (letter = "q") => {
     " " +
     nouns[nou4] +
     ".";
-  console.log(content.length);
   original = document.getElementById("toType").innerText = content;
   originalInsensitive = document
     .getElementById("toType")
     .innerText.toLowerCase();
-  // toType.innerHTML = `<p id="toType"><span class="highlighted">${content}</span></p>`;
 };
 
 let verbs, nouns, adjectives, adverbs, prepositions;
@@ -305,42 +303,53 @@ const getData = async () => {
   );
   return { adjectives, adverbs, nouns, prepositions, verbs };
 };
-// getData();
-// console.log(getData());
 let curLet = localStorage.getItem("currentLetter");
 if (curLet) {
   generateSentence(curLet);
 } else {
   generateSentence();
 }
-const populateLevelSelector = () => {
+const populateLevelSelector = (progress = "") => {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
   for (let i = 0; i < alphabet.length; i++) {
-    console.log(alphabet[i]);
     letterSelectors;
     letter = document.createElement("div");
     letter.className = "letter-selector";
     letter.id = `selector-${alphabet[i]}`;
-    // letter.onclick = generateSentence(alphabet[i]);
-    letter.onclick = function () {
-      generateSentence(alphabet[i]);
-      const collection = document.getElementsByClassName("letter-selector");
-      for (let item of collection) {
-        item.style.color = "black";
-      }
-      localStorage.setItem("currentLetter", alphabet[i]);
-
-      let selectedLetter = document.getElementById(`selector-${alphabet[i]}`);
-      selectedLetter.style.color = "blue";
-    };
+    if (
+      progress >= alphabet[i] ||
+      (progress == null && alphabet[i] == "a") ||
+      (progress == "" && alphabet[i] == "a")
+    ) {
+      letter.setAttribute("aria-active", "true");
+      letter.onclick = function () {
+        generateSentence(alphabet[i]);
+        const collection = document.getElementsByClassName("letter-selector");
+        for (let item of collection) {
+          item.style.color = "black";
+          item.setAttribute("aria-current", "false");
+        }
+        localStorage.setItem("currentLetter", alphabet[i]);
+        let selectedLetter = document.getElementById(`selector-${alphabet[i]}`);
+        selectedLetter.setAttribute("aria-current", "true");
+      };
+    } else {
+      letter.setAttribute("aria-current", "false");
+    }
     letter.innerText = alphabet[i];
+    let curLet = localStorage.getItem("currentLetter");
+
     if (curLet == alphabet[i]) {
-      letter.style.color = "blue";
+      letter.setAttribute("aria-current", "true");
+    } else {
+      letter.setAttribute("aria-current", "false");
     }
     letterSelectors.appendChild(letter);
   }
 };
-populateLevelSelector();
+let curProgress = localStorage.getItem("progress");
+
+populateLevelSelector(curProgress);
 
 const nextLetter = () => {
   let curLet = localStorage.getItem("currentLetter");
@@ -355,13 +364,13 @@ const nextLetter = () => {
   generateSentence(curLet);
   restart();
   generateSentence(curLet);
-  // populateLevelSelector();
   const collection = document.getElementsByClassName("letter-selector");
   for (let item of collection) {
     item.style.color = "black";
+    item.setAttribute("aria-current", "false");
   }
   let selectedLetter = document.getElementById(`selector-${nextLet}`);
-  selectedLetter.style.color = "blue";
+  selectedLetter.setAttribute("aria-current", "true");
 };
 
 const restart = () => {
