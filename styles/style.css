@@ -208,6 +208,8 @@ body .overlay > div {
   background-color: white;
   min-height: 20vh;
   max-height: 80vh;
+  min-width: 40%;
+  max-width: 80%;
   padding: 25px;
   border-radius: 5px;
   display: -webkit-box;

@@ -1,17 +1,19 @@
+// get elements
 const usernameBox = document.getElementById("username");
 const letterSelectors = document.getElementById("letterSelectors");
 const overlay = document.getElementById("user-overlay");
 const finOverlay = document.getElementById("congrats-overlay");
 const leaderOverlay = document.getElementById("leader-overlay");
 const welcomeMsg = document.getElementById("welcome-message");
-
 const toType = document.getElementById("toType");
-
 const textBox = document.getElementById("textField");
-
 const timeH2 = document.getElementById("time");
 
-const leaderboard = JSON.parse(localStorage.getItem("leaderboard"));
+// initialise objects
+const t1 = new Timer();
+const lBoard = new Leaderboard();
+const sentence = new Sentence();
+const levelSelector = new LevelSelector();
 
 const uname = localStorage.getItem("name");
 if (uname != "" && uname != null && uname) {
@@ -21,152 +23,115 @@ if (uname != "" && uname != null && uname) {
 }
 
 let username;
-let timer = 0;
-let timerStarted = false;
-
-const startTimer = () => {
-  const start = Date.now();
-  timerStarted = true;
-  let myTimer = setInterval(() => {
-    if (!timerStarted) {
-      clearInterval(myTimer);
-    }
-    const delta = Date.now() - start;
-    rounded = Math.floor(delta / 1000);
-    // timer = delta / 1000;
-    if (delta / 1000 - rounded < 0.5) {
-      timer = rounded;
-    } else {
-      timer = rounded + 0.5;
-    }
-  }, 500); // runs every half second
-};
-
-const stopTimer = () => {
-  timerStarted = false;
-};
 
 const updateOnType = () => {
   const textBoxValue = textBox.value;
   if (
-    originalInsensitive.length === textBoxValue.length &&
-    originalInsensitive === textBoxValue.toLowerCase()
+    sentence.originalInsensitive.length === textBoxValue.length &&
+    sentence.originalInsensitive === textBoxValue.toLowerCase()
   ) {
+    if (t1.running === false) {
+      // start timer
+      t1.start();
+    }
     //   finished
-    toType.innerHTML = `<p id="toType"><span class="highlighted">${original}</span></p>`;
-    stopTimer();
-    updateCongratesOverlay();
+    toType.innerHTML = `<p id="toType"><span class="highlighted">${sentence.original}</span></p>`;
+    //stop timer
+    let duration = t1.stop();
+    updateCongratesOverlay(duration);
 
     return;
-  } else if (timerStarted === false) {
-    startTimer();
+  } else if (t1.running === false) {
+    // start timer
+    t1.start();
   }
   //   loop through two strings
   for (
     let i = 0;
-    i < (originalInsensitive.length && textBoxValue.length);
+    i < (sentence.originalInsensitive.length && textBoxValue.length);
     i++
   ) {
     let replacementValue = "";
     let end = "";
     let mistake = "";
     if (
-      originalInsensitive.charAt(i) !== textBoxValue.charAt(i).toLowerCase()
+      sentence.originalInsensitive.charAt(i) !==
+      textBoxValue.charAt(i).toLowerCase()
     ) {
       for (let j = 0; j <= i; j++) {
         if (j !== i) {
-          replacementValue = replacementValue + original.charAt(j);
+          replacementValue = replacementValue + sentence.original.charAt(j);
         } else {
-          mistake = originalInsensitive.charAt(j);
+          mistake = sentence.originalInsensitive.charAt(j);
         }
       }
-      for (j = i + 1; j < originalInsensitive.length; j++) {
-        end = end + originalInsensitive.charAt(j);
+      for (j = i + 1; j < sentence.originalInsensitive.length; j++) {
+        end = end + sentence.originalInsensitive.charAt(j);
       }
+      // highlight text
       toType.innerHTML = `<p id="toType"><span class="highlighted">${replacementValue}</span><span class="mistake">${mistake}</span>${end}</p>`;
       return;
     } else {
       for (let j = 0; j <= i; j++) {
-        replacementValue = replacementValue + original.charAt(j);
+        replacementValue = replacementValue + sentence.original.charAt(j);
       }
-      for (j = i + 1; j < originalInsensitive.length; j++) {
-        end = end + originalInsensitive.charAt(j);
+      for (j = i + 1; j < sentence.originalInsensitive.length; j++) {
+        end = end + sentence.originalInsensitive.charAt(j);
       }
+      // highlight text
       toType.innerHTML = `<p id="toType"><span class="highlighted">${replacementValue}</span>${end}</p>`;
     }
   }
   if (textBoxValue.length === 0) {
-    toType.innerHTML = `<p id="toType">${original}</p>`;
+    // starting text
+    toType.innerHTML = `<p id="toType">${sentence.original}</p>`;
   }
 };
 
-const updateCongratesOverlay = () => {
+const updateCongratesOverlay = (time) => {
   let curLet = localStorage.getItem("currentLetter");
+  let progress = localStorage.getItem("progress");
 
   let nextLet =
     curLet.substring(0, curLet.length - 1) +
     String.fromCharCode(curLet.charCodeAt(curLet.length - 1) + 1);
+  // if completed new highest level unlock next letter
+  if (progress < nextLet) {
+    localStorage.setItem("progress", nextLet);
+    document.getElementById("letterSelectors").innerHTML = "";
+    levelSelector.populate(nextLet);
+  }
 
-  localStorage.setItem("progress", nextLet);
-  document.getElementById("letterSelectors").innerHTML = "";
-  populateLevelSelector(nextLet);
-
+  // display the finished overlay
   finOverlay.style.display = "flex";
+
+  //update the statistics
   stats = document.getElementById("stats");
   timeTaken = document.createElement("H2");
-  timeTaken.innerText = `You took ${timer} seconds`;
+  timeTaken.innerText = `You took ${time} seconds`;
   stats.appendChild(timeTaken);
 
-  let wpm = calculateWordsPerMin(timer);
+  let wpm = calculateWordsPerMin(time);
   wordsPer = document.createElement("H2");
   wordsPer.innerText = `${wpm} words per minute`;
   stats.appendChild(wordsPer);
+
   let username = localStorage.getItem("name");
-  // user = { name: username, time: timer };
-  user = { name: username, wpm: wpm, time: timer };
-  addToLeaderboard(user);
+
+  // add current time to leaderboard
+  user = { name: username, wpm: wpm, time: time };
+  lBoard.add(user);
 };
 
 const viewLeaderboard = () => {
+  // display leaderboard
   leaderOverlay.style.display = "flex";
-};
-
-closeCongrats = () => {
-  finOverlay.style.display = "none";
-};
-
-const addToLeaderboard = (user) => {
-  leaderboard.push(user);
-  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-  populateLeaderBoard();
-};
-
-const populateLeaderBoard = () => {
-  let uName = localStorage.getItem("name");
-
-  leaderboard.sort((secondItem, firstItem) => firstItem.wpm - secondItem.wpm);
-  const table = document.getElementById("tableBody");
-  document.getElementById("tableBody").innerHTML = "";
-  leaderboard.forEach((user, index) => {
-    let row = table.insertRow();
-    let position = row.insertCell(0);
-    if (user.name == uName) row.style.color = "green";
-    position.innerHTML = index + 1;
-    let name = row.insertCell(1);
-    if (user.name === "" || user.name === null || user.name === undefined) {
-      name.innerHTML = "Unknown user";
-    } else {
-      name.innerHTML = user.name;
-    }
-    let wpm = row.insertCell(2);
-    wpm.innerHTML = user.wpm;
-  });
 };
 
 const calculateWordsPerMin = (time) => {
   //get number of words
   numWords = 1;
-  tempOriginal = original.replace(/[\s]+/gim, " ");
+  tempOriginal = sentence.original.replace(/[\s]+/gim, " ");
   tempOriginal.replace(/(\s+)/g, () => {
     numWords++;
   });
@@ -189,197 +154,50 @@ const saveUsername = () => {
   }
 };
 
-const generateSentence = async (letter = "q") => {
-  let { adjectives, adverbs, nouns, prepositions, verbs } = await getData();
-  if (letter != null && letter != "") {
-    //filter to contain letter
-    adjectives = adjectives.filter((x) => x.includes(letter));
-    adverbs = adverbs.filter((x) => x.includes(letter));
-    nouns = nouns.filter((x) => x.includes(letter));
-    prepositions = prepositions.filter((x) => x.includes(letter));
-    verbs = verbs.filter((x) => x.includes(letter));
-
-    //order by occurance of selected letter
-    adjectives = adjectives.sort(function (a, b) {
-      return (b.match(/a/g) || []).length - (a.match(/a/g) || []).length;
-    });
-    adverbs = adverbs.sort(function (a, b) {
-      return (b.match(/a/g) || []).length - (a.match(/a/g) || []).length;
-    });
-    nouns = nouns.sort(function (a, b) {
-      return (b.match(/a/g) || []).length - (a.match(/a/g) || []).length;
-    });
-    prepositions = prepositions.sort(function (a, b) {
-      return (b.match(/a/g) || []).length - (a.match(/a/g) || []).length;
-    });
-    verbs = verbs.sort(function (a, b) {
-      return (b.match(/a/g) || []).length - (a.match(/a/g) || []).length;
-    });
-  }
-
-  const randFrom = (arr) => {
-    if (letter != null && letter != "") {
-      var result = Math.random();
-      result =
-        result *
-        result *
-        result *
-        result *
-        result *
-        result *
-        result *
-        result *
-        result *
-        result;
-      result *= arr.length - 1;
-      return (result = Math.floor(result));
-    } else {
-      return Math.floor(Math.random() * arr.length - 1);
-    }
-  };
-  var adj1 = randFrom(adjectives);
-  var adj2 = randFrom(adjectives);
-  var adj3 = randFrom(adjectives);
-  var adj5 = randFrom(adjectives);
-  var adv1 = randFrom(adverbs);
-  var adv2 = randFrom(adverbs);
-  var nou1 = randFrom(nouns);
-  var nou2 = randFrom(nouns);
-  var nou3 = randFrom(nouns);
-  var nou4 = randFrom(nouns);
-  var pre1 = randFrom(prepositions);
-  var ver1 = randFrom(verbs);
-  var ver2 = randFrom(verbs);
-
-  var content =
-    "The " +
-    adjectives[adj1] +
-    " " +
-    nouns[nou1] +
-    " " +
-    adverbs[adv1] +
-    " " +
-    verbs[ver1] +
-    " because some " +
-    nouns[nou2] +
-    " " +
-    adverbs[adv2] +
-    " " +
-    verbs[ver2] +
-    " " +
-    prepositions[pre1] +
-    " a " +
-    adjectives[adj3] +
-    " " +
-    nouns[nou3] +
-    " which, became a " +
-    adjectives[adj5] +
-    " " +
-    nouns[nou4] +
-    ".";
-  original = document.getElementById("toType").innerText = content;
-  originalInsensitive = document
-    .getElementById("toType")
-    .innerText.toLowerCase();
-};
-
-let verbs, nouns, adjectives, adverbs, prepositions;
-
-const getData = async () => {
-  adjectives = await fetch("../schemas/adjectives.json").then((results) =>
-    results.json()
-  );
-  adverbs = await fetch("../schemas/adverbs.json").then((results) =>
-    results.json()
-  );
-  nouns = await fetch("../schemas/nouns.json").then((results) =>
-    results.json()
-  );
-  prepositions = await fetch("../schemas/prepositions.json").then((results) =>
-    results.json()
-  );
-  verbs = await fetch("../schemas/verbs.json").then((results) =>
-    results.json()
-  );
-  return { adjectives, adverbs, nouns, prepositions, verbs };
-};
 let curLet = localStorage.getItem("currentLetter");
 if (curLet) {
-  generateSentence(curLet);
+  sentence.generate(curLet);
 } else {
-  generateSentence();
+  sentence.generate();
 }
-const populateLevelSelector = (progress = "") => {
-  const alphabet = "abcdefghijklmnopqrstuvwxyz";
-  for (let i = 0; i < alphabet.length; i++) {
-    letterSelectors;
-    letter = document.createElement("div");
-    letter.className = "letter-selector";
-    letter.id = `selector-${alphabet[i]}`;
-    if (
-      progress >= alphabet[i] ||
-      (progress == null && alphabet[i] == "a") ||
-      (progress == "" && alphabet[i] == "a")
-    ) {
-      letter.setAttribute("aria-active", "true");
-      letter.onclick = function () {
-        generateSentence(alphabet[i]);
-        const collection = document.getElementsByClassName("letter-selector");
-        for (let item of collection) {
-          item.style.color = "black";
-          item.setAttribute("aria-current", "false");
-        }
-        localStorage.setItem("currentLetter", alphabet[i]);
-        let selectedLetter = document.getElementById(`selector-${alphabet[i]}`);
-        selectedLetter.setAttribute("aria-current", "true");
-      };
-    } else {
-      letter.setAttribute("aria-current", "false");
-    }
-    letter.innerText = alphabet[i];
-    let curLet = localStorage.getItem("currentLetter");
 
-    if (curLet == alphabet[i]) {
-      letter.setAttribute("aria-current", "true");
-    } else {
-      letter.setAttribute("aria-current", "false");
-    }
-    letterSelectors.appendChild(letter);
-  }
-};
 let curProgress = localStorage.getItem("progress");
 
-populateLevelSelector(curProgress);
+levelSelector.populate(curProgress);
 
 const nextLetter = () => {
   let curLet = localStorage.getItem("currentLetter");
+  // display completion message if all letters completed
   if (curLet == "z") {
     alert("completed all leters");
     return;
   }
+  // get next letter
   let nextLet =
     curLet.substring(0, curLet.length - 1) +
     String.fromCharCode(curLet.charCodeAt(curLet.length - 1) + 1);
+  // update local storage with next letter
   localStorage.setItem("currentLetter", nextLet);
-  generateSentence(curLet);
+  // reset all data
   restart();
-  generateSentence(curLet);
-  const collection = document.getElementsByClassName("letter-selector");
-  for (let item of collection) {
-    item.style.color = "black";
-    item.setAttribute("aria-current", "false");
-  }
-  let selectedLetter = document.getElementById(`selector-${nextLet}`);
-  selectedLetter.setAttribute("aria-current", "true");
+  //genertate new sentence
+  sentence.generate(curLet);
+  // update level selection
+  levelSelector.update(nextLet);
 };
 
 const restart = () => {
+  // hide overlays
   finOverlay.style.display = "none";
   leaderOverlay.style.display = "none";
+  // clear textbox
   textBox.value = "";
+  // clear stats
   stats = document.getElementById("stats");
   stats.removeChild(timeTaken);
   stats.removeChild(wordsPer);
-
+  // reset timer
+  t1.reset();
+  // trigger on type to clear highlights
   updateOnType();
 };
