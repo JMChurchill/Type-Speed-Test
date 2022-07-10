@@ -92,6 +92,13 @@ const updateCongratesOverlay = (time) => {
   let curLet = localStorage.getItem("currentLetter");
   let progress = localStorage.getItem("progress");
 
+  if (curLet == null) {
+    curLet = "a";
+  }
+  if (progress == null) {
+    progress = "a";
+  }
+
   let nextLet =
     curLet.substring(0, curLet.length - 1) +
     String.fromCharCode(curLet.charCodeAt(curLet.length - 1) + 1);
@@ -167,6 +174,9 @@ levelSelector.populate(curProgress);
 
 const nextLetter = () => {
   let curLet = localStorage.getItem("currentLetter");
+  if (curLet == null) {
+    curLet = "a";
+  }
   // display completion message if all letters completed
   if (curLet == "z") {
     alert("completed all leters");

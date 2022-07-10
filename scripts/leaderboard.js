@@ -1,7 +1,10 @@
 class Leaderboard {
   constructor() {
     this.data = JSON.parse(localStorage.getItem("leaderboard"));
-    let a = this.data.filter((a) => a.wpm != "Infinity");
+    if (this.data == null) {
+      this.data = [];
+    }
+    // let a = this.data.filter((a) => a.wpm != "Infinity");
     // localStorage.setItem("leaderboard", JSON.stringify(a));
   }
   //   viewLeaderboard = () => {
@@ -32,6 +35,7 @@ class Leaderboard {
     });
   };
   add = (user) => {
+    console.log(user);
     this.data.push(user);
     localStorage.setItem("leaderboard", JSON.stringify(this.data));
     this.populateLeaderBoard();
