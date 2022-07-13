@@ -3,7 +3,7 @@ A typing speed test with random sentence generation, level progression and score
 ## Live Site
 https://timely-medovik-1a78d9.netlify.app/
 ## What I Learned
-* Refreshed Vanila Javascript
+* Refreshed Vanilla Javascript
 ## Application Interfaces
 ![Enter Username](https://user-images.githubusercontent.com/57601700/178749144-935b709a-5fe9-42a6-879a-c1a9de2b892d.png)
 ![Empty Attempt](https://user-images.githubusercontent.com/57601700/178749346-339950b3-85e1-4985-9183-f6b956be7fc7.png)
