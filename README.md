@@ -1,4 +1,6 @@
 # Type-Speed-Test
+![Logo](https://user-images.githubusercontent.com/57601700/178812820-65de0060-a954-4b58-b42f-29b423b52c21.png)
+
 A typing speed test Progressive Web App with level progression, random sentence generation and local leaderboar- built in Javascript
 ## Live Link
 https://timely-medovik-1a78d9.netlify.app/
