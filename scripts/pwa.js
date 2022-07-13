@@ -1,0 +1,20 @@
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  const installBut = document.querySelector(".install-app-btn-container");
+  installBut.style.display = "flex";
+
+  deferredPrompt = e;
+});
+
+const installApp = document.getElementById("installApp");
+
+installApp.addEventListener("click", async () => {
+  if (deferredPrompt !== null) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === "accepted") {
+      deferredPrompt = null;
+    }
+  }
+});

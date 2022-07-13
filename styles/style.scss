@@ -1,8 +1,17 @@
 $primary-background-color: white;
-$primary-color: #00b4be;
+$primary-color: #7fffb2;
 $btn-txt-color: white;
 $border-radius: 5px;
-
+@media all and (display-mode: standalone) {
+  body {
+    .install-app-btn-container {
+      display: none !important;
+    }
+  }
+}
+.install-app-btn-container {
+  display: none;
+}
 html {
   overflow-x: hidden;
 }
@@ -39,6 +48,17 @@ body {
     img {
       width: CLAMP(15rem, 25%, 20rem);
       // width: 25%;
+    }
+    .btn {
+      position: absolute;
+      right: 1rem;
+      // display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      svg {
+        width: 1rem;
+        fill: $btn-txt-color;
+      }
     }
   }
   main {

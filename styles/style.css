@@ -1,9 +1,19 @@
+@media all and (display-mode: standalone) {
+  body .install-app-btn-container {
+    display: none !important;
+  }
+}
+
+.install-app-btn-container {
+  display: none;
+}
+
 html {
   overflow-x: hidden;
 }
 
 .btn {
-  background-color: #00b4be;
+  background-color: #7fffb2;
   color: white;
   margin: 1rem;
   padding: 10px;
@@ -52,6 +62,21 @@ body header {
 
 body header img {
   width: CLAMP(15rem, 25%, 20rem);
+}
+
+body header .btn {
+  position: absolute;
+  right: 1rem;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  gap: 0.5rem;
+}
+
+body header .btn svg {
+  width: 1rem;
+  fill: white;
 }
 
 body main {
@@ -203,7 +228,7 @@ body .leaderboard table th {
 }
 
 body .leaderboard table th {
-  background-color: #00b4be;
+  background-color: #7fffb2;
   color: white;
 }
 
@@ -282,7 +307,7 @@ body #letterSelectors > div {
 }
 
 body #letterSelectors > div[aria-current="true"] {
-  color: #00b4be !important;
+  color: #7fffb2 !important;
 }
 
 body #letterSelectors > div[aria-disabled="false"] {
