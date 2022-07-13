@@ -1,14 +1,15 @@
 # Type-Speed-Test
-A typing speed test with random sentence generation, level progression and scoreboard
+A typing speed test Progressive Web App with level progression, random sentence generation and local leaderboar- built in Javascript
 ## Live Link
 https://timely-medovik-1a78d9.netlify.app/
 ## What I Learned
-* Refreshed Vanilla Javascript
+* How to create a progressive web application
+* Refreshed vanilla javascript
 ## Application Interfaces
-![Enter Username](https://user-images.githubusercontent.com/57601700/178749144-935b709a-5fe9-42a6-879a-c1a9de2b892d.png)
-![Empty Attempt](https://user-images.githubusercontent.com/57601700/178749346-339950b3-85e1-4985-9183-f6b956be7fc7.png)
-![Attempt](https://user-images.githubusercontent.com/57601700/178749350-e8fb13c9-af3b-425c-adc1-42eb1057ade9.png)
-![Mistake](https://user-images.githubusercontent.com/57601700/178749354-c9a591f6-5cd9-42e8-8444-d40e64f5d507.png)
-![Congratulations](https://user-images.githubusercontent.com/57601700/178749357-cac6ea49-871c-4c3e-89f6-2739daa16dc3.png)
-![Learderboard](https://user-images.githubusercontent.com/57601700/178749366-4046103b-969e-4440-9a57-07fdd4458c6c.png)
-![Next Letter](https://user-images.githubusercontent.com/57601700/178749367-140c5083-4e0f-42e5-b558-9da6051871e3.png)
+
+![Enter Username](https://user-images.githubusercontent.com/57601700/178812049-ebc6c81a-d1b6-4e9b-9fba-078f3dc32557.png)
+![Empty Attempt](https://user-images.githubusercontent.com/57601700/178812106-04fc6e83-13d9-4bbd-ba00-d4099ae13e99.png)
+![Mistake](https://user-images.githubusercontent.com/57601700/178812102-deb37403-24f3-4d20-95d1-1976032aa449.png)
+![Congrats](https://user-images.githubusercontent.com/57601700/178812100-8f0fd77d-0979-4707-b211-18efa4a5bccb.png)
+![Leaderboard](https://user-images.githubusercontent.com/57601700/178812097-53e4fa93-84b2-4ac0-b956-52d774da8fb0.png)
+![Next Letter](https://user-images.githubusercontent.com/57601700/178812089-827d5f86-2ebd-48a0-8e30-67741f9010fd.png)
