@@ -1,24 +1,45 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles/style.css" />
-    <title>Speed</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <title>Type Go</title>
   </head>
   <body>
-    <h1 id="welcome-message">Improve your typing speed</h1>
-    <!-- <div class="enter-name-box">
-      <label for="username">Enter a username</label>
-      <input id="username" name="username" type="text" />
-    </div> -->
-    <div class="type-tester">
-      <div id="letterSelectors"></div>
-      <div class="message">
-        <p id="toType">type this really fast</p>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js");
+      }
+    </script>
+    <header>
+      <img src="./Logo.png" alt="Logo" />
+    </header>
+    <main>
+      <h1 id="welcome-message">Improve your typing speed</h1>
+      <!-- <div class="enter-name-box">
+        <label for="username">Enter a username</label>
+        <input id="username" name="username" type="text" />
+      </div> -->
+      <div class="type-tester">
+        <div id="letterSelectors"></div>
+        <div class="message">
+          <p id="toType">type this really fast</p>
+        </div>
+        <label for="textField">Type the message</label>
+        <input type="text" id="textField" name="toType" />
       </div>
-      <input type="text" id="textField" />
-    </div>
+    </main>
     <div class="overlay" id="user-overlay" style="display: flex">
       <div class="enter-name-box">
         <div class="input-box">

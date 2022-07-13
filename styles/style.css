@@ -1,3 +1,7 @@
+html {
+  overflow-x: hidden;
+}
+
 .btn {
   background-color: #00b4be;
   color: white;
@@ -31,13 +35,38 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding: 0 10%;
   position: relative;
+}
+
+body header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+body header img {
+  width: CLAMP(15rem, 25%, 20rem);
+}
+
+body main {
+  padding: 0 10%;
 }
 
 body h1 {
   color: black;
   font-size: 2rem;
+}
+
+body label {
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  margin: 1rem 0 0 0;
 }
 
 body input {
@@ -256,12 +285,12 @@ body #letterSelectors > div[aria-current="true"] {
   color: #00b4be !important;
 }
 
-body #letterSelectors > div[aria-active="true"] {
+body #letterSelectors > div[aria-disabled="false"] {
   cursor: pointer;
   background-color: white;
 }
 
-body #letterSelectors > div[aria-active="true"]:hover {
+body #letterSelectors > div[aria-disabled="false"]:hover {
   -webkit-transform: scale(1.1);
           transform: scale(1.1);
   -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

@@ -7,12 +7,13 @@ class LevelSelector {
       let letter = document.createElement("div");
       letter.className = "letter-selector";
       letter.id = `selector-${alphabet[i]}`;
+      letter.setAttribute("aria-disabled", "true");
       if (
         progress >= alphabet[i] ||
         (progress == null && alphabet[i] == "a") ||
         (progress == "" && alphabet[i] == "a")
       ) {
-        letter.setAttribute("aria-active", "true");
+        letter.setAttribute("aria-disabled", "false");
         letter.onclick = function () {
           // generateSentence(alphabet[i]);
           sentence.generate(alphabet[i]);

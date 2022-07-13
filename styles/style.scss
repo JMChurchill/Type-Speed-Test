@@ -3,6 +3,9 @@ $primary-color: #00b4be;
 $btn-txt-color: white;
 $border-radius: 5px;
 
+html {
+  overflow-x: hidden;
+}
 .btn {
   background-color: $primary-color;
   color: $btn-txt-color;
@@ -27,11 +30,27 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 10%;
+  // padding: 0 10%;
   position: relative;
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      width: CLAMP(15rem, 25%, 20rem);
+      // width: 25%;
+    }
+  }
+  main {
+    padding: 0 10%;
+  }
   h1 {
     color: black;
     font-size: 2rem;
+  }
+  label {
+    align-self: flex-start;
+    margin: 1rem 0 0 0;
   }
   input {
     border-radius: $border-radius;
@@ -167,14 +186,22 @@ body {
       &[aria-current="true"] {
         color: $primary-color !important;
       }
-      &[aria-active="true"] {
+      &[aria-disabled="false"] {
         cursor: pointer;
         background-color: $primary-background-color;
       }
-      &[aria-active="true"]:hover {
+      &[aria-disabled="false"]:hover {
         transform: scale(1.1);
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       }
+      // &[aria-active="true"] {
+      //   cursor: pointer;
+      //   background-color: $primary-background-color;
+      // }
+      // &[aria-active="true"]:hover {
+      //   transform: scale(1.1);
+      //   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      // }
     }
   }
 }
